@@ -1,1 +1,5 @@
-<Solution />
+<Solution>
+  <Folder Name="/Api/">
+    <Project Path="ZNWalks.Api/ZNWalks.Api.csproj" />
+  </Folder>
+</Solution>
