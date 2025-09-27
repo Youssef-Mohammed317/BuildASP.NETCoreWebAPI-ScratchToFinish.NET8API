@@ -2,4 +2,7 @@
   <Folder Name="/Api/">
     <Project Path="ZNWalks.Api/ZNWalks.Api.csproj" />
   </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="Domain/Domain.csproj" />
+  </Folder>
 </Solution>
