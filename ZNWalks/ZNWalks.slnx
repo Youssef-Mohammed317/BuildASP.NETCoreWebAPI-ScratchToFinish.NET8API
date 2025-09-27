@@ -8,4 +8,10 @@
   <Folder Name="/Domain/">
     <Project Path="Domain/ZNWalks.Domain.csproj" />
   </Folder>
+  <Folder Name="/Infra.Data/">
+    <Project Path="ZNWalk.Infa.Data/ZNWalk.Infa.Data.csproj" />
+  </Folder>
+  <Folder Name="/Infra.IoC/">
+    <Project Path="ZNWalks.Infra.IoC/ZNWalks.Infra.IoC.csproj" />
+  </Folder>
 </Solution>
