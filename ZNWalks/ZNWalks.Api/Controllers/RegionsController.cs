@@ -39,7 +39,7 @@ namespace ZNWalks.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { Id = region.Id }, region);
         }
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, UpdateRegionDto updateRegionDto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto)
         {
             var region = await _regionServices.UpdateAsync(id, updateRegionDto);
 
