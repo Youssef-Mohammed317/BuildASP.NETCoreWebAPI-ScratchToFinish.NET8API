@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace ZNWalks.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public RegionDto Create(CreateRegionDto regionDto)
+        public async Task<RegionDto> CreateAsync(CreateRegionDto regionDto)
         {
             var region = new Region()
             {
@@ -27,9 +28,9 @@ namespace ZNWalks.Application.Services
                 Code = regionDto.Code,
                 RegionImageUrl = regionDto.RegionImageUrl,
             };
-            _unitOfWork.RegionRepository.Create(region);
+            await _unitOfWork.RegionRepository.CreateAsync(region);
 
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
 
             return new RegionDto
             {
@@ -40,21 +41,21 @@ namespace ZNWalks.Application.Services
             };
         }
 
-        public void DeleteById(Guid id)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            var region = _unitOfWork.RegionRepository.GetById(id);
+            var region = await _unitOfWork.RegionRepository.GetByIdAsync(id);
             if (region == null)
             {
                 throw new Exception("Not Found");
             }
             _unitOfWork.RegionRepository.Delete(region);
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public IEnumerable<RegionDto> GetAll()
+        public async Task<IEnumerable<RegionDto>> GetAllAsync()
         {
             var regions = new List<RegionDto>();
-            foreach (var region in _unitOfWork.RegionRepository.GetAll())
+            foreach (var region in await _unitOfWork.RegionRepository.GetAll().ToListAsync())
             {
                 regions.Add(new RegionDto()
                 {
@@ -66,9 +67,9 @@ namespace ZNWalks.Application.Services
             }
             return regions;
         }
-        public RegionDto GetById(Guid id)
+        public async Task<RegionDto> GetByIdAsync(Guid id)
         {
-            var region = _unitOfWork.RegionRepository.GetById(id);
+            var region = await _unitOfWork.RegionRepository.GetByIdAsync(id);
             if (region != null)
             {
                 return new RegionDto()
@@ -82,9 +83,9 @@ namespace ZNWalks.Application.Services
             return null!;
         }
 
-        public RegionDto Update(Guid id, UpdateRegionDto regionDto)
+        public async Task<RegionDto> UpdateAsync(Guid id, UpdateRegionDto regionDto)
         {
-            var region = _unitOfWork.RegionRepository.GetById(id);
+            var region = await _unitOfWork.RegionRepository.GetByIdAsync(id);
             if (region == null)
             {
                 throw new Exception("Not Found");
@@ -93,7 +94,7 @@ namespace ZNWalks.Application.Services
             region.Code = regionDto.Code;
             region.RegionImageUrl = regionDto.RegionImageUrl;
             _unitOfWork.RegionRepository.Update(region);
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
 
             return new RegionDto
             {

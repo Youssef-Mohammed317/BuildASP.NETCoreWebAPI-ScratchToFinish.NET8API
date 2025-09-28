@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using ZNWalks.Application.DTOs.RegionDTOs;
 using ZNWalks.Application.Interfaces;
 
@@ -17,37 +18,37 @@ namespace ZNWalks.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var regions = _regionServices.GetAll();
+            var regions = await _regionServices.GetAllAsync();
 
             return Ok(regions);
         }
         [HttpGet("{id:guid}")]
-        public IActionResult GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var region = _regionServices.GetById(id);
+            var region = await _regionServices.GetByIdAsync(id);
 
             return region == null ? NotFound() : Ok(region);
         }
         [HttpPost]
-        public IActionResult Create([FromBody] CreateRegionDto createRegionDto)
+        public async Task<IActionResult> Create([FromBody] CreateRegionDto createRegionDto)
         {
-            var region = _regionServices.Create(createRegionDto);
+            var region = await _regionServices.CreateAsync(createRegionDto);
 
             return CreatedAtAction(nameof(GetById), new { Id = region.Id }, region);
         }
         [HttpPut("{id:guid}")]
-        public IActionResult Update([FromRoute] Guid id, UpdateRegionDto updateRegionDto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, UpdateRegionDto updateRegionDto)
         {
-            var region = _regionServices.Update(id, updateRegionDto);
+            var region = await _regionServices.UpdateAsync(id, updateRegionDto);
 
             return Ok(region);
         }
         [HttpDelete("{id:guid}")]
-        public IActionResult DeleteById([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {
-            _regionServices.DeleteById(id);
+            await _regionServices.DeleteByIdAsync(id);
 
             return NoContent();
         }

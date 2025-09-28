@@ -10,8 +10,8 @@ namespace ZNWalks.Domain.Interfaces
     public interface IRegionRepository
     {
         IQueryable<Region> GetAll();
-        Region GetById(Guid id);
-        void Create(Region region);
+        Task<Region?> GetByIdAsync(Guid id);
+        Task CreateAsync(Region region);
         void Update(Region region);
         void Delete(Region region);
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,9 +19,9 @@ namespace ZNWalk.Infa.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public void Create(Region region)
+        public async Task CreateAsync(Region region)
         {
-            _dbContext.Region.Add(region);
+            await _dbContext.Region.AddAsync(region);
         }
 
         public void Delete(Region region)
@@ -30,17 +31,18 @@ namespace ZNWalk.Infa.Data.Repositories
 
         public IQueryable<Region> GetAll()
         {
-            return _dbContext.Region;
+            return _dbContext.Region.AsQueryable();
         }
 
-        public Region GetById(Guid id)
+        public async Task<Region?> GetByIdAsync(Guid id)
         {
-            return _dbContext.Region.Find(id)!;
+            return await _dbContext.Region.FindAsync(id);
         }
 
         public void Update(Region region)
         {
             _dbContext.Region.Update(region);
         }
+
     }
 }

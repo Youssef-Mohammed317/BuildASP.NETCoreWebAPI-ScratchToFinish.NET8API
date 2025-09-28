@@ -54,9 +54,9 @@ namespace ZNWalk.Infa.Data.Repositories
             }
         }
 
-        public void SaveChanges()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
     }

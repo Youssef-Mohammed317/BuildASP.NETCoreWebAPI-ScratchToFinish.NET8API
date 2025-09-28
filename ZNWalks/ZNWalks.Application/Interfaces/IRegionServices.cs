@@ -9,10 +9,10 @@ namespace ZNWalks.Application.Interfaces
 {
     public interface IRegionServices
     {
-        public IEnumerable<RegionDto> GetAll();
-        public RegionDto GetById(Guid id);
-        public void DeleteById(Guid id);
-        public RegionDto Update(Guid id, UpdateRegionDto regionDto);
-        public RegionDto Create(CreateRegionDto regionDto);
+        public Task<IEnumerable<RegionDto>> GetAllAsync();
+        public Task<RegionDto> GetByIdAsync(Guid id);
+        public Task DeleteByIdAsync(Guid id);
+        public Task<RegionDto> UpdateAsync(Guid id, UpdateRegionDto regionDto);
+        public Task<RegionDto> CreateAsync(CreateRegionDto regionDto);
     }
 }
