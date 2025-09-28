@@ -19,14 +19,7 @@ namespace ZNWalks.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
-            builder.Services.AddDbContext<ZNWalksDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("ZNWalksConnectionString"));
-            });
-
-
-            RegisterServices(builder.Services);
+            RegisterServices(builder.Services, builder.Configuration);
 
             var app = builder.Build();
 
@@ -46,9 +39,9 @@ namespace ZNWalks.Api
 
             app.Run();
         }
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
-            DependancyContainer.RegisterServices(services);
+            DependancyContainer.RegisterServices(services, configuration);
         }
     }
 }

@@ -10,4 +10,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ZNWalk.Infa.Data\ZNWalk.Infa.Data.csproj" />
+    <ProjectReference Include="..\ZNWalks.Application\ZNWalks.Application.csproj" />
+  </ItemGroup>
+
 </Project>
