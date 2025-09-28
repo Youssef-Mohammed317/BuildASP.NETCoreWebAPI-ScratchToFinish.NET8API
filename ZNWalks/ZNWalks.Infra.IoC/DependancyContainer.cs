@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZNWalk.Infa.Data.Contexts;
 using ZNWalk.Infa.Data.Repositories;
+using ZNWalks.Application.AutoMapper;
 using ZNWalks.Application.Interfaces;
 using ZNWalks.Application.Services;
 using ZNWalks.Domain.Interfaces;
@@ -29,10 +30,19 @@ namespace ZNWalks.Infra.IoC
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
+            #region AutoMapper
+            services.AddAutoMapper(cfg =>
+            {
+                //cfg.AddProfile<RegionDomainToDtoProfile>();
+                //cfg.AddProfile<RegionDtoToDomainProfile>();
+                cfg.AddMaps(typeof(RegionDomainToDtoProfile).Assembly); // for all profiles in this assembly :)
+            });
+            #endregion
+
             #region Services
-            services.AddScoped<IRegionServices, RegionServices>();
-            services.AddScoped<IDifficultyServices, DifficultyServices>();
-            services.AddScoped<IWalkServices, WalkServices>();
+            services.AddScoped<IRegionService, RegionService>();
+            services.AddScoped<IDifficultyService, DifficultyService>();
+            services.AddScoped<IWalkService, WalkService>();
             #endregion
         }
     }

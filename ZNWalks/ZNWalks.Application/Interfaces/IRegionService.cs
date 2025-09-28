@@ -7,7 +7,7 @@ using ZNWalks.Application.DTOs.RegionDTOs;
 
 namespace ZNWalks.Application.Interfaces
 {
-    public interface IRegionServices
+    public interface IRegionService
     {
         public Task<IEnumerable<RegionDto>> GetAllAsync();
         public Task<RegionDto> GetByIdAsync(Guid id);

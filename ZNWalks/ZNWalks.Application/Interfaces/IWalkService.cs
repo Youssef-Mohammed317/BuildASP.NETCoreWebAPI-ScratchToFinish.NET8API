@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZNWalks.Application.Interfaces;
 
-namespace ZNWalks.Application.Services
+namespace ZNWalks.Application.Interfaces
 {
-    public class WalkServices : IWalkServices
+    public interface IWalkService
     {
     }
 }

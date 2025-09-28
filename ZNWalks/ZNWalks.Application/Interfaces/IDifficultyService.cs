@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZNWalks.Application.Interfaces
 {
-    public interface IDifficultyServices
+    public interface IDifficultyService
     {
     }
 }

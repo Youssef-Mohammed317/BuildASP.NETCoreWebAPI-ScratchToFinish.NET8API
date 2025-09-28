@@ -10,9 +10,9 @@ namespace ZNWalks.Api.Controllers
     [ApiController]
     public class RegionsController : ControllerBase
     {
-        private readonly IRegionServices _regionServices;
+        private readonly IRegionService _regionServices;
 
-        public RegionsController(IRegionServices regionServices)
+        public RegionsController(IRegionService regionServices)
         {
             _regionServices = regionServices;
         }

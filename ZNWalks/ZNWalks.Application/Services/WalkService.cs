@@ -7,7 +7,7 @@ using ZNWalks.Application.Interfaces;
 
 namespace ZNWalks.Application.Services
 {
-    public class DifficultyServices : IDifficultyServices
+    public class WalkService : IWalkService
     {
     }
 }

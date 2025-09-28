@@ -19,7 +19,6 @@ namespace ZNWalk.Infa.Data.Repositories
         {
             _dbContext = dbContext;
         }
-
         public IRegionRepository RegionRepository
         {
             get
@@ -53,7 +52,6 @@ namespace ZNWalk.Infa.Data.Repositories
                 return _difficultyRepository;
             }
         }
-
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
