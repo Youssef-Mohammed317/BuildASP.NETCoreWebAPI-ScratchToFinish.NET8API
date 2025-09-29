@@ -34,7 +34,7 @@ namespace ZNWalks.Application.Services
             return _mapper.Map<RegionDto>(region);
         }
 
-        public async Task DeleteByIdAsync(Guid id)
+        public async Task<RegionDto> DeleteByIdAsync(Guid id)
         {
             var region = await _unitOfWork.RegionRepository.GetByIdAsync(id);
             if (region == null)
@@ -43,6 +43,8 @@ namespace ZNWalks.Application.Services
             }
             _unitOfWork.RegionRepository.Delete(region);
             await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<RegionDto>(region);
         }
 
         public async Task<IEnumerable<RegionDto>> GetAllAsync()

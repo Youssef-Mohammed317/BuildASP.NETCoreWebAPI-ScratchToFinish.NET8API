@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZNWalk.Infa.Data.Contexts;
 using ZNWalk.Infa.Data.Repositories;
-using ZNWalks.Application.AutoMapper;
+using ZNWalks.Application.AutoMapper.RegionProfiles;
 using ZNWalks.Application.Interfaces;
 using ZNWalks.Application.Services;
 using ZNWalks.Domain.Interfaces;
@@ -33,8 +33,6 @@ namespace ZNWalks.Infra.IoC
             #region AutoMapper
             services.AddAutoMapper(cfg =>
             {
-                //cfg.AddProfile<RegionDomainToDtoProfile>();
-                //cfg.AddProfile<RegionDtoToDomainProfile>();
                 cfg.AddMaps(typeof(RegionDomainToDtoProfile).Assembly); // for all profiles in this assembly :)
             });
             #endregion

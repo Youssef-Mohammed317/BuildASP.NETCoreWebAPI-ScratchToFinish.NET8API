@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using ZNWalks.Application.DTOs.RegionDTOs;
 using ZNWalks.Domain.Models;
 
-namespace ZNWalks.Application.AutoMapper
+namespace ZNWalks.Application.AutoMapper.RegionProfiles
 {
-    public class RegionDomainToDtoProfile : Profile
+    public class UpdateRegionDtoToDomainProfile : Profile
     {
-        public RegionDomainToDtoProfile()
+        public UpdateRegionDtoToDomainProfile()
         {
-            CreateMap<Region, RegionDto>();
+            CreateMap<UpdateRegionDto, Region>();
         }
     }
 }

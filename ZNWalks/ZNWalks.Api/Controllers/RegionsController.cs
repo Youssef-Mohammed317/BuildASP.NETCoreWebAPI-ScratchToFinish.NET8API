@@ -48,9 +48,9 @@ namespace ZNWalks.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {
-            await _regionServices.DeleteByIdAsync(id);
+            var region = await _regionServices.DeleteByIdAsync(id);
 
-            return NoContent();
+            return Ok(region);
         }
     }
 }
