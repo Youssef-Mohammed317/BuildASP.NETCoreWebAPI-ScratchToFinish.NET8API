@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ZNWalks.Application.DTOs.DifficultyDTOs
 {
-    public class DifficultyDto
+    public class UpdateDifficultyDto
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
     }
 }

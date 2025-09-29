@@ -8,11 +8,11 @@ namespace ZNWalks.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegionsController : ControllerBase
+    public class RegionController : ControllerBase
     {
         private readonly IRegionService _regionServices;
 
-        public RegionsController(IRegionService regionServices)
+        public RegionController(IRegionService regionServices)
         {
             _regionServices = regionServices;
         }
@@ -35,22 +35,21 @@ namespace ZNWalks.Api.Controllers
         public async Task<IActionResult> Create([FromBody] CreateRegionDto createRegionDto)
         {
             var region = await _regionServices.CreateAsync(createRegionDto);
-
-            return CreatedAtAction(nameof(GetById), new { Id = region.Id }, region);
+            return region == null ? NotFound() : CreatedAtAction(nameof(GetById), new { Id = region.Id }, region);
         }
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto)
         {
             var region = await _regionServices.UpdateAsync(id, updateRegionDto);
 
-            return Ok(region);
+            return region == null ? NotFound() : Ok(region);
         }
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {
             var region = await _regionServices.DeleteByIdAsync(id);
 
-            return Ok(region);
+            return region == null ? NotFound() : Ok(region);
         }
     }
 }

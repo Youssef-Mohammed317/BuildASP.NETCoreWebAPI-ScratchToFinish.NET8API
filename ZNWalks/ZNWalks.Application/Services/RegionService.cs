@@ -34,14 +34,15 @@ namespace ZNWalks.Application.Services
             return _mapper.Map<RegionDto>(region);
         }
 
-        public async Task<RegionDto> DeleteByIdAsync(Guid id)
+        public async Task<RegionDto?> DeleteByIdAsync(Guid id)
         {
             var region = await _unitOfWork.RegionRepository.GetByIdAsync(id);
             if (region == null)
             {
-                throw new Exception("Not Found");
+                return null!;
             }
             _unitOfWork.RegionRepository.Delete(region);
+
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<RegionDto>(region);
@@ -53,7 +54,7 @@ namespace ZNWalks.Application.Services
 
             return _mapper.Map<IEnumerable<RegionDto>>(regions);
         }
-        public async Task<RegionDto> GetByIdAsync(Guid id)
+        public async Task<RegionDto?> GetByIdAsync(Guid id)
         {
             var region = await _unitOfWork.RegionRepository.GetByIdAsync(id);
             if (region != null)
@@ -63,16 +64,17 @@ namespace ZNWalks.Application.Services
             return null!;
         }
 
-        public async Task<RegionDto> UpdateAsync(Guid id, UpdateRegionDto regionDto)
+        public async Task<RegionDto?> UpdateAsync(Guid id, UpdateRegionDto regionDto)
         {
             var region = await _unitOfWork.RegionRepository.GetByIdAsync(id);
             if (region == null)
             {
-                throw new Exception("Not Found");
+                return null!;
             }
-            region = _mapper.Map<Region>(regionDto);
+            _mapper.Map(regionDto, region);
 
             _unitOfWork.RegionRepository.Update(region);
+
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<RegionDto>(region);

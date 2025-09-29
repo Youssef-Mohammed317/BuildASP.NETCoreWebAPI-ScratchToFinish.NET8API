@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZNWalks.Application.DTOs.DifficultyDTOs;
-using ZNWalks.Application.DTOs.RegionDTOs;
 using ZNWalks.Domain.Models;
 
 namespace ZNWalks.Application.DTOs.WalkDTOs
 {
-    public class WalkDto
+    public class CreateWalkDto
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public double LengthInKm { get; set; }
