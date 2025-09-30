@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using ZNWalks.Api.CustomActionFilters;
 using ZNWalks.Application.DTOs.RegionDTOs;
 using ZNWalks.Application.Interfaces;
 
@@ -24,6 +25,7 @@ namespace ZNWalks.Api.Controllers
 
             return Ok(regions);
         }
+
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
@@ -31,19 +33,24 @@ namespace ZNWalks.Api.Controllers
 
             return region == null ? NotFound() : Ok(region);
         }
+
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] CreateRegionDto createRegionDto)
         {
             var region = await _regionServices.CreateAsync(createRegionDto);
             return region == null ? NotFound() : CreatedAtAction(nameof(GetById), new { Id = region.Id }, region);
         }
+
         [HttpPut("{id:guid}")]
+        [ValidateModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto)
         {
             var region = await _regionServices.UpdateAsync(id, updateRegionDto);
 
             return region == null ? NotFound() : Ok(region);
         }
+
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {

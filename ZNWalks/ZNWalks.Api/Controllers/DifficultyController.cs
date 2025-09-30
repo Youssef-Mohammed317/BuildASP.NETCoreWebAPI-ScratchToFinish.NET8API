@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ZNWalks.Api.CustomActionFilters;
 using ZNWalks.Application.DTOs.DifficultyDTOs;
 using ZNWalks.Application.DTOs.RegionDTOs;
 using ZNWalks.Application.Interfaces;
@@ -26,6 +27,7 @@ namespace ZNWalks.Api.Controllers
 
             return Ok(difficulties);
         }
+
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
@@ -33,20 +35,25 @@ namespace ZNWalks.Api.Controllers
 
             return difficulty == null ? NotFound() : Ok(difficulty);
         }
+
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] CreateDifficultyDto createDifficulty)
         {
             var difficulty = await _difficultyService.CreateAsync(createDifficulty);
 
             return difficulty == null ? NotFound() : CreatedAtAction(nameof(GetById), new { Id = difficulty.Id }, difficulty);
         }
+
         [HttpPut("{id:guid}")]
+        [ValidateModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateDifficultyDto updateDifficultyDto)
         {
             var difficulty = await _difficultyService.UpdateAsync(id, updateDifficultyDto);
 
             return difficulty == null ? NotFound() : Ok(difficulty);
         }
+
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {

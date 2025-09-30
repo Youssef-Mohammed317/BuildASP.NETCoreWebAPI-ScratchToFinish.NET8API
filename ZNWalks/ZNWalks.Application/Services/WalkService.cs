@@ -2,9 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZNWalks.Application.DTOs.Common.Filtering;
+using ZNWalks.Application.DTOs.Common.Paginate;
+using ZNWalks.Application.DTOs.Common.Sorting;
 using ZNWalks.Application.DTOs.WalkDTOs;
 using ZNWalks.Application.Interfaces;
 using ZNWalks.Domain.Interfaces;
@@ -50,21 +54,41 @@ namespace ZNWalks.Application.Services
 
         }
 
-        public async Task<IEnumerable<WalkDto>> GetAllAsync()
+        public async Task<IEnumerable<WalkDto>> GetAllAsync(
+            FilterParam? filterParam = null,
+            SortParam? sortParam = null,
+            PaginateParam? paginateParam = null)
         {
-            var walks = await _unitOfWork.WalkRepository.GetAll().ToListAsync();
+            var walks = _unitOfWork.WalkRepository.GetAll();
 
-            return _mapper.Map<IEnumerable<WalkDto>>(walks);
+            walks = FilterSortPaginate(walks, new GetAllRequestDto
+            {
+                filterParams = [filterParam],
+                sortParams = [sortParam],
+                paginateParam = paginateParam
+            });
+
+            return _mapper.Map<IEnumerable<WalkDto>>(await walks.ToListAsync());
         }
-        public async Task<IEnumerable<WalkDetailsDto>> GetAllWithDetailsAsync()
+        public async Task<IEnumerable<WalkDetailsDto>> GetAllWithDetailsAsync(
+                FilterParam? filterParam = null,
+                SortParam? sortParam = null,
+                PaginateParam? paginateParam = null)
         {
-            var walks = await _unitOfWork.WalkRepository.GetAll()
-                .Include(w => w.Difficulty)
-                .Include(w => w.Region)
-                .ToListAsync();
+            var walks = _unitOfWork.WalkRepository.GetAll();
 
-            return _mapper.Map<IEnumerable<WalkDetailsDto>>(walks);
+            walks = FilterSortPaginate(walks, new GetAllRequestDto
+            {
+                filterParams = [filterParam],
+                sortParams = [sortParam],
+                paginateParam = paginateParam
+            });
+
+            walks = GetDetails(walks);
+
+            return _mapper.Map<IEnumerable<WalkDetailsDto>>(await walks.ToListAsync());
         }
+
         public async Task<WalkDetailsDto?> GetByIdAsync(Guid id)
         {
             var walk = await _unitOfWork.WalkRepository.GetByIdAsync(id);
@@ -73,6 +97,27 @@ namespace ZNWalks.Application.Services
                 return null;
             }
             return _mapper.Map<WalkDetailsDto>(walk);
+        }
+
+        public async Task<IEnumerable<WalkDto>> SearchWalkAsync(GetAllRequestDto requestDto)
+        {
+            var walks = _unitOfWork.WalkRepository.GetAll();
+
+            walks = FilterSortPaginate(walks, requestDto);
+
+            walks = GetDetails(walks);
+
+            return _mapper.Map<IEnumerable<WalkDto>>(await walks.ToListAsync());
+        }
+        public async Task<IEnumerable<WalkDetailsDto>> SearchWalkWithDetailsAsync(GetAllRequestDto requestDto)
+        {
+            var walks = _unitOfWork.WalkRepository.GetAll();
+
+            walks = FilterSortPaginate(walks, requestDto);
+
+            walks = GetDetails(walks);
+
+            return _mapper.Map<IEnumerable<WalkDetailsDto>>(await walks.ToListAsync());
         }
 
         public async Task<WalkDetailsDto?> UpdateAsync(Guid id, UpdateWalkDto walkDto)
@@ -91,6 +136,31 @@ namespace ZNWalks.Application.Services
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<WalkDetailsDto>(walk);
+        }
+
+
+        private IQueryable<Walk> FilterSortPaginate(IQueryable<Walk> walks, GetAllRequestDto requestDto)
+        {
+
+            // filter
+            walks = FilterHelper.Filter<Walk>(walks, requestDto.filterParams);
+
+            // sort
+            walks = SortHelper.Sort<Walk>(walks, requestDto.sortParams);
+
+            // pagenation
+            int pageSize = requestDto?.paginateParam?.PageSize ?? 10;
+
+            int skipResult = (pageSize * (requestDto?.paginateParam?.PageNumber - 1)) ?? 0;
+
+            walks = walks.Skip(skipResult).Take(pageSize);
+
+            return walks;
+        }
+
+        private IQueryable<Walk> GetDetails(IQueryable<Walk> walks)
+        {
+            return walks.Include(w => w.Difficulty).Include(w => w.Region);
         }
     }
 }
