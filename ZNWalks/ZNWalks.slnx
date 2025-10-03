@@ -11,6 +11,9 @@
   <Folder Name="/Infra.Data/">
     <Project Path="ZNWalk.Infa.Data/ZNWalk.Infa.Data.csproj" />
   </Folder>
+  <Folder Name="/Infra.Identity/">
+    <Project Path="ZNWalks.Infra.Identity/ZNWalks.Infra.Identity.csproj" Id="9a8a6633-0718-4bb5-ad15-84ad31a2262f" />
+  </Folder>
   <Folder Name="/Infra.IoC/">
     <Project Path="ZNWalks.Infra.IoC/ZNWalks.Infra.IoC.csproj" />
   </Folder>

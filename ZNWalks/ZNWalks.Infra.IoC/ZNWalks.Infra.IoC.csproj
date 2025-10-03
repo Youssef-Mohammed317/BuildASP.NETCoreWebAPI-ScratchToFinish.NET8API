@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.20" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.20" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ZNWalk.Infa.Data\ZNWalk.Infa.Data.csproj" />
     <ProjectReference Include="..\ZNWalks.Application\ZNWalks.Application.csproj" />
+    <ProjectReference Include="..\ZNWalks.Infra.Identity\ZNWalks.Infra.Identity.csproj" />
   </ItemGroup>
 
 </Project>

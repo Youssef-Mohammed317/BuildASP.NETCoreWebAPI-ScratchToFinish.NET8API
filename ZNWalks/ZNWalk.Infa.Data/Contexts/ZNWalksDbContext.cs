@@ -14,7 +14,7 @@ namespace ZNWalk.Infa.Data.Contexts
         public ZNWalksDbContext() : base()
         {
         }
-        public ZNWalksDbContext(DbContextOptions options) : base(options)
+        public ZNWalksDbContext(DbContextOptions<ZNWalksDbContext> options) : base(options)
         {
         }
 

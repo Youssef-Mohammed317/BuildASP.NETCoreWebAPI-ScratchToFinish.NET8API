@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ZNWalks.Api.CustomActionFilters;
@@ -19,6 +20,7 @@ namespace ZNWalks.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Reader,Writer")]
         public async Task<IActionResult> GetAll()
         {
             var regions = await _regionServices.GetAllAsync();
@@ -27,6 +29,7 @@ namespace ZNWalks.Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Reader,Writer")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var region = await _regionServices.GetByIdAsync(id);
@@ -36,6 +39,7 @@ namespace ZNWalks.Api.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Create([FromBody] CreateRegionDto createRegionDto)
         {
             var region = await _regionServices.CreateAsync(createRegionDto);
@@ -44,6 +48,7 @@ namespace ZNWalks.Api.Controllers
 
         [HttpPut("{id:guid}")]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto)
         {
             var region = await _regionServices.UpdateAsync(id, updateRegionDto);
@@ -52,6 +57,7 @@ namespace ZNWalks.Api.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {
             var region = await _regionServices.DeleteByIdAsync(id);
