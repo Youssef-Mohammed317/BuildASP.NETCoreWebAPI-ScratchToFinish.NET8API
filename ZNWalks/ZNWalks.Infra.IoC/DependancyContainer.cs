@@ -93,7 +93,10 @@ namespace ZNWalks.Infra.IoC
             services.AddScoped<IWalkService, WalkService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IImageService, ImageService>();
             #endregion
+
+            services.AddHttpContextAccessor(); 
         }
     }
 }

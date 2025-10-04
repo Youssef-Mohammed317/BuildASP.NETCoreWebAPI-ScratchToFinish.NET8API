@@ -12,31 +12,31 @@ namespace ZNWalk.Infa.Data.Repositories
 {
     public class WalkRepository : IWalkRepository
     {
-        private readonly ZNWalksDbContext _dbContext;
+        private readonly ZNWalksDbContext dbContext;
 
-        public WalkRepository(ZNWalksDbContext dbContext)
+        public WalkRepository(ZNWalksDbContext _dbContext)
         {
-            _dbContext = dbContext;
+            dbContext = _dbContext;
         }
 
         public async Task CreateAsync(Walk walk)
         {
-            await _dbContext.Walk.AddAsync(walk);
+            await dbContext.Walk.AddAsync(walk);
         }
 
         public void Delete(Walk walk)
         {
-            _dbContext.Walk.Remove(walk);
+            dbContext.Walk.Remove(walk);
         }
 
         public IQueryable<Walk> GetAll()
         {
-            return _dbContext.Walk.AsQueryable();
+            return dbContext.Walk.AsQueryable();
         }
 
         public async Task<Walk?> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Walk
+            return await dbContext.Walk
                 .Include(w => w.Difficulty)
                 .Include(w => w.Region)
                 .FirstOrDefaultAsync(w => w.Id == id);
@@ -44,7 +44,7 @@ namespace ZNWalk.Infa.Data.Repositories
 
         public void Update(Walk walk)
         {
-            _dbContext.Walk.Update(walk);
+            dbContext.Walk.Update(walk);
         }
     }
 }

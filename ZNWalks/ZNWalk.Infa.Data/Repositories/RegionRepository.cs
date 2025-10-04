@@ -12,36 +12,36 @@ namespace ZNWalk.Infa.Data.Repositories
 {
     public class RegionRepository : IRegionRepository
     {
-        private readonly ZNWalksDbContext _dbContext;
+        private readonly ZNWalksDbContext dbContext;
 
-        public RegionRepository(ZNWalksDbContext dbContext)
+        public RegionRepository(ZNWalksDbContext _dbContext)
         {
-            _dbContext = dbContext;
+            dbContext = _dbContext;
         }
 
         public async Task CreateAsync(Region region)
         {
-            await _dbContext.Region.AddAsync(region);
+            await dbContext.Region.AddAsync(region);
         }
 
         public void Delete(Region region)
         {
-            _dbContext.Region.Remove(region);
+            dbContext.Region.Remove(region);
         }
 
         public IQueryable<Region> GetAll()
         {
-            return _dbContext.Region.AsQueryable();
+            return dbContext.Region.AsQueryable();
         }
 
         public async Task<Region?> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Region.FindAsync(id);
+            return await dbContext.Region.FindAsync(id);
         }
 
         public void Update(Region region)
         {
-            _dbContext.Region.Update(region);
+            dbContext.Region.Update(region);
         }
 
     }

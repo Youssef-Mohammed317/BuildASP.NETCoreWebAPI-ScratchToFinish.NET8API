@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using ZNWalk.Infa.Data.Contexts;
 using ZNWalks.Api.CustomMiddlewares;
@@ -66,6 +67,12 @@ namespace ZNWalks.Api
             app.UseAuthorization();
 
             app.UseMiddleware<TokenValidationMiddleware>();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"Images")),
+                RequestPath = "/Images"
+            });
 
             app.MapControllers();
 

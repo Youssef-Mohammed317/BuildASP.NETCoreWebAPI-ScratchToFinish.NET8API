@@ -20,4 +20,8 @@
     <ProjectReference Include="..\ZNWalks.Infra.IoC\ZNWalks.Infra.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
 </Project>

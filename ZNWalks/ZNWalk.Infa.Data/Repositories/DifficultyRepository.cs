@@ -12,37 +12,37 @@ namespace ZNWalk.Infa.Data.Repositories
 {
     public class DifficultyRepository : IDifficultyRepository
     {
-        private readonly ZNWalksDbContext _dbContext;
+        private readonly ZNWalksDbContext dbContext;
 
-        public DifficultyRepository(ZNWalksDbContext dbContext)
+        public DifficultyRepository(ZNWalksDbContext _dbContext)
         {
-            _dbContext = dbContext;
+            dbContext = _dbContext;
         }
 
         public async Task CreateAsync(Difficulty difficulty)
         {
-            await _dbContext.Difficulty.AddAsync(difficulty);
+            await dbContext.Difficulty.AddAsync(difficulty);
         }
 
         public void Delete(Difficulty difficulty)
         {
-            _dbContext.Difficulty.Remove(difficulty);
+            dbContext.Difficulty.Remove(difficulty);
         }
 
         public IQueryable<Difficulty> GetAll()
         {
-            return _dbContext.Difficulty.AsQueryable();
+            return dbContext.Difficulty.AsQueryable();
         }
 
         public async Task<Difficulty?> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Difficulty
+            return await dbContext.Difficulty
                 .FirstOrDefaultAsync(w => w.Id == id);
         }
 
         public void Update(Difficulty difficulty)
         {
-            _dbContext.Difficulty.Update(difficulty);
+            dbContext.Difficulty.Update(difficulty);
         }
     }
 }

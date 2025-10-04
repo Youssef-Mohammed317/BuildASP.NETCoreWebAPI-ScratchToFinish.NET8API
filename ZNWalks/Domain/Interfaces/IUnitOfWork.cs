@@ -11,6 +11,7 @@ namespace ZNWalks.Domain.Interfaces
         IRegionRepository RegionRepository { get; }
         IWalkRepository WalkRepository { get; }
         IDifficultyRepository DifficultyRepository { get; }
+        IImageRepository ImageRepository { get; }
         Task SaveChangesAsync();
     }
 }

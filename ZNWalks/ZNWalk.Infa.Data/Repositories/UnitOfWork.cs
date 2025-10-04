@@ -10,51 +10,63 @@ namespace ZNWalk.Infa.Data.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ZNWalksDbContext _dbContext;
-        private IRegionRepository? _regionRepository;
-        private IDifficultyRepository? _difficultyRepository;
-        private IWalkRepository? _walkRepository;
+        private readonly ZNWalksDbContext dbContext;
+        private IRegionRepository? regionRepository;
+        private IDifficultyRepository? difficultyRepository;
+        private IWalkRepository? walkRepository;
+        private IImageRepository? imageRepository;
 
-        public UnitOfWork(ZNWalksDbContext dbContext)
+        public UnitOfWork(ZNWalksDbContext _dbContext)
         {
-            _dbContext = dbContext;
+            dbContext = _dbContext;
         }
         public IRegionRepository RegionRepository
         {
             get
             {
-                if (_regionRepository is null)
+                if (regionRepository is null)
                 {
-                    _regionRepository = new RegionRepository(_dbContext);
+                    regionRepository = new RegionRepository(dbContext);
                 }
-                return _regionRepository;
+                return regionRepository;
             }
         }
         public IWalkRepository WalkRepository
         {
             get
             {
-                if (_walkRepository is null)
+                if (walkRepository is null)
                 {
-                    _walkRepository = new WalkRepository(_dbContext);
+                    walkRepository = new WalkRepository(dbContext);
                 }
-                return _walkRepository;
+                return walkRepository;
             }
         }
         public IDifficultyRepository DifficultyRepository
         {
             get
             {
-                if (_difficultyRepository is null)
+                if (difficultyRepository is null)
                 {
-                    _difficultyRepository = new DifficultyRepository(_dbContext);
+                    difficultyRepository = new DifficultyRepository(dbContext);
                 }
-                return _difficultyRepository;
+                return difficultyRepository;
+            }
+        }
+        public IImageRepository ImageRepository
+        {
+            get
+            {
+                if (imageRepository is null)
+                {
+                    imageRepository = new ImageRepository(dbContext);
+                }
+                return imageRepository;
             }
         }
         public async Task SaveChangesAsync()
         {
-            await _dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
         }
 
     }

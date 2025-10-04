@@ -27,5 +27,7 @@ namespace ZNWalk.Infa.Data.Contexts
         public DbSet<Difficulty> Difficulty { get; set; }
         public DbSet<Region> Region { get; set; }
         public DbSet<Walk> Walk { get; set; }
+        public DbSet<Image> Image { get; set; }
+
     }
 }
