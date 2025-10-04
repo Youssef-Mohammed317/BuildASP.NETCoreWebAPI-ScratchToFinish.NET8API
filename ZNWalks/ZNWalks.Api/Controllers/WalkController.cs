@@ -16,21 +16,21 @@ namespace ZNWalks.Api.Controllers
     [ApiController]
     public class WalkController : ControllerBase
     {
-        private readonly IWalkService _walkService;
+        private readonly IWalkService walkService;
 
-        public WalkController(IWalkService walkService)
+        public WalkController(IWalkService _walkService)
         {
-            _walkService = walkService;
+            walkService = _walkService;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Reader,Writer")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll(
             [FromQuery] FilterParam? filterParam = null,
             [FromQuery] SortParam? sortParam = null,
             [FromQuery] PaginateParam? paginateParam = null)
         {
-            var walks = await _walkService.GetAllAsync(
+            var walks = await walkService.GetAllAsync(
                 filterParam,
                 sortParam,
                 paginateParam);
@@ -39,18 +39,18 @@ namespace ZNWalks.Api.Controllers
         }
 
         [HttpPost("search")]
-        [Authorize(Roles = "Reader,Writer")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> Search([FromBody] GetAllRequestDto requestDto)
         {
-            var walks = await _walkService.SearchWalkAsync(requestDto);
+            var walks = await walkService.SearchWalkAsync(requestDto);
 
             return Ok(walks);
         }
         [HttpPost("search/details")]
-        [Authorize(Roles = "Reader,Writer")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> SearchWithDetails([FromBody] GetAllRequestDto requestDto)
         {
-            var walks = await _walkService.SearchWalkWithDetailsAsync(requestDto);
+            var walks = await walkService.SearchWalkWithDetailsAsync(requestDto);
 
             return Ok(walks);
         }
@@ -58,13 +58,13 @@ namespace ZNWalks.Api.Controllers
 
         [HttpGet]
         [Route("details")]
-        [Authorize(Roles = "Reader,Writer")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAllWithDetails(
             [FromQuery] FilterParam? filterParam = null,
             [FromQuery] SortParam? sortParam = null,
             [FromQuery] PaginateParam? paginateParam = null)
         {
-            var walks = await _walkService.GetAllWithDetailsAsync(
+            var walks = await walkService.GetAllWithDetailsAsync(
                 filterParam,
                 sortParam,
                 paginateParam);
@@ -73,10 +73,10 @@ namespace ZNWalks.Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        [Authorize(Roles = "Reader,Writer")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var walk = await _walkService.GetByIdAsync(id);
+            var walk = await walkService.GetByIdAsync(id);
 
             return walk == null ? NotFound() : Ok(walk);
         }
@@ -84,7 +84,7 @@ namespace ZNWalks.Api.Controllers
         [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {
-            var walk = await _walkService.DeleteByIdAsync(id);
+            var walk = await walkService.DeleteByIdAsync(id);
 
             return walk == null ? NotFound() : Ok(walk);
         }
@@ -93,7 +93,7 @@ namespace ZNWalks.Api.Controllers
         [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateWalkDto walkDto)
         {
-            var walk = await _walkService.UpdateAsync(id, walkDto);
+            var walk = await walkService.UpdateAsync(id, walkDto);
 
             return walk == null ? NotFound() : Ok(walk);
         }
@@ -102,7 +102,7 @@ namespace ZNWalks.Api.Controllers
         [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Create([FromBody] CreateWalkDto walkDto)
         {
-            var walk = await _walkService.CreateAsync(walkDto);
+            var walk = await walkService.CreateAsync(walkDto);
             return walk == null ? NotFound() : Ok(walk);
         }
 

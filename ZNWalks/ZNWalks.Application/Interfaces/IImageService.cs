@@ -11,6 +11,9 @@ namespace ZNWalks.Application.Interfaces
     {
         Task<ImageResponseDto> UploadImageAsync(UploadImageRequestDto request);
 
-        Task<ImageResponseDto> DeleteImage(Guid id);
+        Task<ImageResponseDto> DeleteImageAsync(Guid id);
+
+        Task<ImageResponseDto> DownLoadImageAsync(Guid id);
+
     }
 }

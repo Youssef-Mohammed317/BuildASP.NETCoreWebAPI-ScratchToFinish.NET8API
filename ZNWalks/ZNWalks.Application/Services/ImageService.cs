@@ -30,7 +30,7 @@ namespace ZNWalks.Application.Services
             httpContextAccessor = _httpContextAccessor;
             mapper = _mapper;
         }
-        public async Task<ImageResponseDto> DeleteImage(Guid id)
+        public async Task<ImageResponseDto> DeleteImageAsync(Guid id)
         {
             var imageDomain = await unitOfWork.ImageRepository.GetByIdAsync(id);
 
@@ -51,6 +51,41 @@ namespace ZNWalks.Application.Services
             {
                 Success = true,
                 Message = "This image deleted successfully!"
+            };
+
+        }
+
+        public async Task<ImageResponseDto> DownLoadImageAsync(Guid id)
+        {
+            var imageDomain = await unitOfWork.ImageRepository.GetByIdAsync(id);
+
+            if (imageDomain == null || !File.Exists(imageDomain.LocalFilePath))
+            {
+                return new DeleteImageFailureResponseDto
+                {
+                    Success = false,
+                    Message = "This image does not exist!, Please check your data."
+                };
+            }
+
+            var imageContent = await File.ReadAllBytesAsync(imageDomain.LocalFilePath);
+
+            if(imageContent == null)
+            {
+                return new DeleteImageFailureResponseDto
+                {
+                    Success = false,
+                    Message = "Something went wrong!, please try again."
+                };
+            }
+
+            return new DownloadImageResponseDto
+            {
+                Success = true,
+                Message = "File Strating Download Successfully",
+                Content = imageContent,
+                FileName = imageDomain.FileName,
+                ContentType = imageDomain.FileType
             };
 
         }

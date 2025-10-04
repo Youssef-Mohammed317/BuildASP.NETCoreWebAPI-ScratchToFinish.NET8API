@@ -19,18 +19,18 @@ namespace ZNWalks.Application.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IAuthUnitOfWork _unitOfWork;
+        private readonly IAuthUnitOfWork unitOfWork;
         private readonly IConfiguration configuration;
 
-        public AuthService(IAuthUnitOfWork unitOfWork, IConfiguration configuration)
+        public AuthService(IAuthUnitOfWork _unitOfWork, IConfiguration _configuration)
         {
-            _unitOfWork = unitOfWork;
-            this.configuration = configuration;
+            unitOfWork = _unitOfWork;
+            configuration = _configuration;
         }
 
         public async Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequestDto)
         {
-            var user = await _unitOfWork.AuthRepository.FindByEmailAsync(loginRequestDto.Username);
+            var user = await unitOfWork.AuthRepository.FindByEmailAsync(loginRequestDto.Username);
 
             if (user == null)
             {
@@ -41,7 +41,7 @@ namespace ZNWalks.Application.Services
                 };
             }
 
-            var result = await _unitOfWork.AuthRepository.CheckPasswordAsync(user, loginRequestDto.Password);
+            var result = await unitOfWork.AuthRepository.CheckPasswordAsync(user, loginRequestDto.Password);
 
             if (result == false)
             {
@@ -52,13 +52,13 @@ namespace ZNWalks.Application.Services
                 };
             }
 
-            var roles = await _unitOfWork.AuthRepository.GetUserRolesAsync(user);
+            var roles = await unitOfWork.AuthRepository.GetUserRolesAsync(user);
 
             var claims = CreateClaims(user, roles);
 
             var token = CreateTokenString(claims);
 
-            await _unitOfWork.TokenRepository.AddTokenAsync(new TokenStore
+            await unitOfWork.TokenRepository.AddTokenAsync(new TokenStore
             {
                 UserId = user.Id,
                 Jti = claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value,
@@ -78,12 +78,32 @@ namespace ZNWalks.Application.Services
 
         public async Task LogoutAsync(string jti)
         {
-            await _unitOfWork.TokenRepository.RevokeTokenAsync(jti);
+            await unitOfWork.TokenRepository.RevokeTokenAsync(jti);
         }
 
         public async Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto registerRequestDto)
         {
-            using var transaction = await _unitOfWork.AuthRepository.BeginTransactionAsync();
+            var roles = await unitOfWork.AuthRepository.GetRolesAsync();
+            if (registerRequestDto.Roles == null || !registerRequestDto.Roles.Any())
+            {
+                return new RegisterResponseDto
+                {
+                    Success = false,
+                    Message = "There is no Roles!, Please check your data"
+                };
+            }
+
+            foreach (var role in registerRequestDto.Roles)
+            {
+                if (!roles.Contains(role.ToUpper()))
+                {
+                    new RegisterResponseDto
+                    {
+                        Success = false,
+                        Message = "There is invaild roles sent!, Please check your data"
+                    };
+                }
+            }
 
             var user = new ApplicationUser
             {
@@ -91,7 +111,7 @@ namespace ZNWalks.Application.Services
                 Email = registerRequestDto.Username,
             };
 
-            var result = await _unitOfWork.AuthRepository.CreateUserAsync(user, registerRequestDto.Password);
+            var result = await unitOfWork.AuthRepository.CreateUserAsync(user, registerRequestDto.Password);
 
             if (!result.Succeeded)
             {
@@ -102,24 +122,18 @@ namespace ZNWalks.Application.Services
                 };
             }
 
-            if (registerRequestDto.Roles != null && registerRequestDto.Roles.Any())
+
+            result = await unitOfWork.AuthRepository.AddUserToRolesAsync(user, registerRequestDto.Roles);
+            if (!result.Succeeded)
             {
-                try
+
+                return new RegisterResponseDto
                 {
-                    result = await _unitOfWork.AuthRepository.AddUserToRolesAsync(user, registerRequestDto.Roles);
-                }
-                catch (Exception ex)
-                {
-                    await _unitOfWork.AuthRepository.DeleteUserAsync(user);
-                    await transaction.RollbackAsync();
-                    return new RegisterResponseDto
-                    {
-                        Success = false,
-                        Message = string.Join(", ", result.Errors.Select(e => e.Description), ex.Message)
-                    };
-                }
+                    Success = false,
+                    Message = string.Join(", ", result.Errors.Select(e => e.Description))
+                };
             }
-            await transaction.CommitAsync();
+
             return new RegisterResponseDto
             {
                 Success = true,

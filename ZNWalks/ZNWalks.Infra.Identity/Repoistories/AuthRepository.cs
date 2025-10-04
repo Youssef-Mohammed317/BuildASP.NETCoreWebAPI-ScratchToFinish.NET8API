@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -14,63 +15,69 @@ namespace ZNWalks.Infra.Identity.Repoistories
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly ZNWalksAuthDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly ZNWalksAuthDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
 
-        public AuthRepository(ZNWalksAuthDbContext context,
-            UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager)
+        public AuthRepository(ZNWalksAuthDbContext _context,
+            UserManager<ApplicationUser> _userManager,
+            RoleManager<ApplicationRole> _roleManager)
         {
-            _context = context;
-            _userManager = userManager;
-            _roleManager = roleManager;
+            context = _context;
+            userManager = _userManager;
+            roleManager = _roleManager;
+        }
+        public async Task<List<string?>> GetRolesAsync()
+        {
+            var roles = await context.Roles.Select(r => r.NormalizedName).ToListAsync();
+           
+            return roles;
         }
 
         public async Task<IdentityResult> AddUserToRolesAsync(ApplicationUser user, IEnumerable<string> roles)
         {
-            var result = await _userManager.AddToRolesAsync(user, roles);
+            var result = await userManager.AddToRolesAsync(user, roles);
 
             return result;
         }
 
         public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
         {
-            var result = await _userManager.CheckPasswordAsync(user, password);
+            var result = await userManager.CheckPasswordAsync(user, password);
 
             return result;
         }
 
         public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
         {
-            var result = await _userManager.CreateAsync(user, password);
+            var result = await userManager.CreateAsync(user, password);
 
             return result;
         }
         public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
         {
-            var result = await _userManager.DeleteAsync(user);
+            var result = await userManager.DeleteAsync(user);
 
             return result;
         }
 
         public async Task<ApplicationUser?> FindByEmailAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await userManager.FindByEmailAsync(email);
 
             return user;
         }
 
         public async Task<IEnumerable<string>> GetUserRolesAsync(ApplicationUser user)
         {
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await userManager.GetRolesAsync(user);
 
             return roles;
         }
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            return await _context.Database.BeginTransactionAsync();
+            return await context.Database.BeginTransactionAsync();
         }
     }
 }

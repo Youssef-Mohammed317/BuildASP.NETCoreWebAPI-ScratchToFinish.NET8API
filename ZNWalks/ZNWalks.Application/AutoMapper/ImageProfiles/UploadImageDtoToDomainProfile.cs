@@ -20,6 +20,7 @@ namespace ZNWalks.Application.AutoMapper.ImageProfiles
                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.FileName))
                 .ForMember(dest => dest.FileExtension, opt => opt.MapFrom(src => Path.GetExtension(src.File.FileName)))
                 .ForMember(dest => dest.FileSizeInBytes, opt => opt.MapFrom(src => src.File.Length))
+                .ForMember(dest => dest.FileType, opt => opt.MapFrom(src => src.File.ContentType))
                 .ForMember(dest => dest.FileDescrpition, opt => opt.MapFrom(src => src.FileDescription));
         }
     }

@@ -12,12 +12,12 @@ namespace ZNWalks.Infra.Identity.Domian.Interfaces
     public interface IAuthRepository
     {
         Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password);
-        public Task<IdentityResult> DeleteUserAsync(ApplicationUser user);
-
+        Task<IdentityResult> DeleteUserAsync(ApplicationUser user);
+        Task<List<string?>> GetRolesAsync();
         Task<IdentityResult> AddUserToRolesAsync(ApplicationUser user, IEnumerable<string> roles);
         Task<ApplicationUser?> FindByEmailAsync(string email);
         Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
         Task<IEnumerable<string>> GetUserRolesAsync(ApplicationUser user);
-        public Task<IDbContextTransaction> BeginTransactionAsync();
+        Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

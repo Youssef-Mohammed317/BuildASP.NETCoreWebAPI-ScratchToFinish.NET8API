@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using ZNWalk.Infa.Data.Contexts;
 using ZNWalks.Api.CustomMiddlewares;
 using ZNWalks.Infra.IoC;
+using Serilog;
 
 namespace ZNWalks.Api
 {
@@ -15,8 +16,16 @@ namespace ZNWalks.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            var logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/ZNWalks_Log.txt", rollingInterval: RollingInterval.Minute)
+                .MinimumLevel.Information()
+                .CreateLogger();
+            builder.Logging.ClearProviders();
+            builder.Logging.AddSerilog(logger);
 
+
+            // Add services to the container.
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -60,7 +69,10 @@ namespace ZNWalks.Api
                 app.UseSwaggerUI();
             }
 
+
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseAuthentication();
 
@@ -70,7 +82,7 @@ namespace ZNWalks.Api
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"Images")),
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
                 RequestPath = "/Images"
             });
 

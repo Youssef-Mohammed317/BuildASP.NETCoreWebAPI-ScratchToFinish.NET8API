@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -35,9 +36,24 @@ namespace ZNWalks.Api.Controllers
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
 
-            var result = await imageService.DeleteImage(id);
+            var result = await imageService.DeleteImageAsync(id);
 
             return result.Success ? Ok(result) : BadRequest(result);
+        }
+        [HttpPost("Download/{id:guid}")]
+        //[Authorize(Roles = "Writer")]
+        [ValidateModel]
+        public async Task<IActionResult> Download([FromRoute] Guid id)
+        {
+
+            var result = await imageService.DownLoadImageAsync(id);
+
+            if (result.Success && result is DownloadImageResponseDto data)
+            {
+                return File(data.Content, data.ContentType, data.FileName);
+            }
+
+            return BadRequest(result);
         }
     }
 }

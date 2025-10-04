@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZNWalk.Infa.Data.Contexts;
 
@@ -11,9 +12,11 @@ using ZNWalk.Infa.Data.Contexts;
 namespace ZNWalk.Infa.Data.Migrations
 {
     [DbContext(typeof(ZNWalksDbContext))]
-    partial class ZNWalksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251004215200_Add FileType To ImageTable")]
+    partial class AddFileTypeToImageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

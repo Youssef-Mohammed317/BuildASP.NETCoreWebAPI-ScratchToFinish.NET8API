@@ -14,18 +14,18 @@ namespace ZNWalks.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly IAuthService authService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService _authService)
         {
-            _authService = authService;
+            authService = _authService;
         }
 
         [HttpPost("Register")]
         [ValidateModel]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
         {
-            var result = await _authService.RegisterAsync(registerRequestDto);
+            var result = await authService.RegisterAsync(registerRequestDto);
 
             return result.Success ? Ok(result) : BadRequest(result);
         }
@@ -34,7 +34,7 @@ namespace ZNWalks.Api.Controllers
         [ValidateModel]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
-            var result = await _authService.LoginAsync(loginRequestDto);
+            var result = await authService.LoginAsync(loginRequestDto);
 
             return result.Success ? Ok(result) : BadRequest(result);
         }
@@ -48,7 +48,7 @@ namespace ZNWalks.Api.Controllers
             if (string.IsNullOrEmpty(jti))
                 return BadRequest("Invalid token.");
 
-            await _authService.LogoutAsync(jti);
+            await authService.LogoutAsync(jti);
 
             return Ok(new { message = "User logged out successfully." });
         }

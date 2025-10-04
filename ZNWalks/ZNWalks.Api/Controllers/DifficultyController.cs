@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using ZNWalks.Api.CustomActionFilters;
 using ZNWalks.Application.DTOs.DifficultyDTOs;
 using ZNWalks.Application.DTOs.RegionDTOs;
@@ -14,27 +15,27 @@ namespace ZNWalks.Api.Controllers
     [ApiController]
     public class DifficultyController : ControllerBase
     {
-        private readonly IDifficultyService _difficultyService;
+        private readonly IDifficultyService difficultyService;
 
-        public DifficultyController(IDifficultyService difficultyService)
+        public DifficultyController(IDifficultyService _difficultyService)
         {
-            _difficultyService = difficultyService;
+            difficultyService = _difficultyService;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Reader,Writer")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll()
         {
-            var difficulties = await _difficultyService.GetAllAsync();
-
+            throw new Exception("My Exception");
+            var difficulties = await difficultyService.GetAllAsync();
             return Ok(difficulties);
         }
 
         [HttpGet("{id:guid}")]
-        [Authorize(Roles = "Reader,Writer")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var difficulty = await _difficultyService.GetByIdAsync(id);
+            var difficulty = await difficultyService.GetByIdAsync(id);
 
             return difficulty == null ? NotFound() : Ok(difficulty);
         }
@@ -44,7 +45,7 @@ namespace ZNWalks.Api.Controllers
         [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Create([FromBody] CreateDifficultyDto createDifficulty)
         {
-            var difficulty = await _difficultyService.CreateAsync(createDifficulty);
+            var difficulty = await difficultyService.CreateAsync(createDifficulty);
 
             return difficulty == null ? NotFound() : CreatedAtAction(nameof(GetById), new { Id = difficulty.Id }, difficulty);
         }
@@ -54,7 +55,7 @@ namespace ZNWalks.Api.Controllers
         [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateDifficultyDto updateDifficultyDto)
         {
-            var difficulty = await _difficultyService.UpdateAsync(id, updateDifficultyDto);
+            var difficulty = await difficultyService.UpdateAsync(id, updateDifficultyDto);
 
             return difficulty == null ? NotFound() : Ok(difficulty);
         }
@@ -63,7 +64,7 @@ namespace ZNWalks.Api.Controllers
         [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {
-            var difficulty = await _difficultyService.DeleteByIdAsync(id);
+            var difficulty = await difficultyService.DeleteByIdAsync(id);
 
             return difficulty == null ? NotFound() : Ok(difficulty);
         }
