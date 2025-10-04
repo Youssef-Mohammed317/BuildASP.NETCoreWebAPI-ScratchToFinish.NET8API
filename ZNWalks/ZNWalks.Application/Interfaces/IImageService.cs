@@ -9,6 +9,8 @@ namespace ZNWalks.Application.Interfaces
 {
     public interface IImageService
     {
-        Task<ImageUploadResponseDto> UploadImageAsync(ImageUploadRequestDto request);
+        Task<ImageResponseDto> UploadImageAsync(UploadImageRequestDto request);
+
+        Task<ImageResponseDto> DeleteImage(Guid id);
     }
 }

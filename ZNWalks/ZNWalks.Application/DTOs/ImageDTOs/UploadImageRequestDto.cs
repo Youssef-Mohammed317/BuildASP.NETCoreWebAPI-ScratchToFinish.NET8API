@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ZNWalks.Application.DTOs.ImageDTOs
 {
-    public class ImageUploadRequestDto
+    public class UploadImageRequestDto
     {
         [Required]
         public IFormFile File { get; set; }

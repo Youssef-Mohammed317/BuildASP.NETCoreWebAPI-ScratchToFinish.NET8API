@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZNWalks.Application.DTOs.ImageDTOs
 {
-    public abstract class ImageUploadResponseDto
+    public abstract class ImageResponseDto
     {
         public bool Success { get; set; }
         public string? Message { get; set; }

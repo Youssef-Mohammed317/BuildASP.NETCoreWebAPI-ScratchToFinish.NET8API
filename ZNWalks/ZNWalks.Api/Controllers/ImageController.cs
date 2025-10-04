@@ -22,10 +22,20 @@ namespace ZNWalks.Api.Controllers
         [HttpPost("Upload")]
         //[Authorize(Roles = "Writer")]
         [ValidateModel]
-        public async Task<IActionResult> Upload([FromForm] ImageUploadRequestDto request)
+        public async Task<IActionResult> Upload([FromForm] UploadImageRequestDto request)
         {
 
             var result = await imageService.UploadImageAsync(request);
+
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+        [HttpPost("Delete/{id:guid}")]
+        //[Authorize(Roles = "Writer")]
+        [ValidateModel]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+
+            var result = await imageService.DeleteImage(id);
 
             return result.Success ? Ok(result) : BadRequest(result);
         }

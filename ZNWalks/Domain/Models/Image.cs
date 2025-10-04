@@ -21,5 +21,8 @@ namespace ZNWalks.Domain.Models
         public long FileSizeInBytes { get; set; }
         public string FilePath { get; set; }
 
+        public string LocalFilePath { get; set; }
+
+
     }
 }

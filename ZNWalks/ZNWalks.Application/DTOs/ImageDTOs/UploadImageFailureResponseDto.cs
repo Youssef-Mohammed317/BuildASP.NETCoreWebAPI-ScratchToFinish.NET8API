@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ZNWalks.Application.DTOs.ImageDTOs
 {
-    public class ImageUploadFailureResponseDto : ImageUploadResponseDto
+    public class UploadImageFailureResponseDto : ImageResponseDto
     {
     }
 }

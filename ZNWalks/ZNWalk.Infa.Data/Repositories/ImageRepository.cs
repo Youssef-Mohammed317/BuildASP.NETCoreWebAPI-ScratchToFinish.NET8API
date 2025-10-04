@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,18 @@ namespace ZNWalk.Infa.Data.Repositories
         public async Task CreateAsync(Image image)
         {
             await dbContext.Image.AddAsync(image);
+        }
+
+        public void Delete(Image image)
+        {
+            dbContext.Image.Remove(image);
+        }
+
+        public async Task<Image?> GetByIdAsync(Guid id)
+        {
+            var image = await dbContext.Image.FirstOrDefaultAsync(img => img.Id == id);
+
+            return image;
         }
     }
 }

@@ -30,11 +30,34 @@ namespace ZNWalks.Application.Services
             httpContextAccessor = _httpContextAccessor;
             mapper = _mapper;
         }
+        public async Task<ImageResponseDto> DeleteImage(Guid id)
+        {
+            var imageDomain = await unitOfWork.ImageRepository.GetByIdAsync(id);
 
-        public async Task<ImageUploadResponseDto> UploadImageAsync(ImageUploadRequestDto request)
+            if (imageDomain == null || !File.Exists(imageDomain.LocalFilePath))
+            {
+                return new DeleteImageFailureResponseDto
+                {
+                    Success = false,
+                    Message = "This image does not exist!, Please check your data."
+                };
+            }
+
+            File.Delete(imageDomain.LocalFilePath);
+
+            unitOfWork.ImageRepository.Delete(imageDomain);
+
+            return new DeleteImageSuccessResponseDto
+            {
+                Success = true,
+                Message = "This image deleted successfully!"
+            };
+
+        }
+        public async Task<ImageResponseDto> UploadImageAsync(UploadImageRequestDto request)
         {
 
-            ImageUploadResponseDto result = ValidateFileUpload(request);
+            ImageResponseDto result = ValidateFileUpload(request);
 
             if (!result.Success)
             {
@@ -44,18 +67,17 @@ namespace ZNWalks.Application.Services
 
             imageDomain.StoredFileName = Guid.NewGuid();
 
-            var urlFilePath = await GenerateUrlPath(imageDomain);
-
-            imageDomain.FilePath = urlFilePath;
+            imageDomain = await AddFilePathesToImageAsync(imageDomain);
 
             await unitOfWork.ImageRepository.CreateAsync(imageDomain);
+
             await unitOfWork.SaveChangesAsync();
 
-            return new ImageUploadSuccessResponseDto
+            return new UploadImageSuccessResponseDto
             {
                 Success = true,
                 Message = "File Uploaded Successfully",
-                FilePath = urlFilePath,
+                FilePath = imageDomain.FilePath,
                 FileSizeInBytes = imageDomain.FileSizeInBytes,
                 FileName = imageDomain.FileName,
                 File = imageDomain.File,
@@ -65,13 +87,13 @@ namespace ZNWalks.Application.Services
             };
         }
 
-        private ImageUploadResponseDto ValidateFileUpload(ImageUploadRequestDto request)
+        private ImageResponseDto ValidateFileUpload(UploadImageRequestDto request)
         {
             var fileExtension = Path.GetExtension(request.File.FileName);
 
             if (!allowedExtensions.Contains(fileExtension))
             {
-                return new ImageUploadFailureResponseDto
+                return new UploadImageFailureResponseDto
                 {
                     Success = false,
                     Message = "Unsupported file extension"
@@ -80,7 +102,7 @@ namespace ZNWalks.Application.Services
 
             if (request.File.Length > maxFileSize)
             {
-                return new ImageUploadFailureResponseDto
+                return new UploadImageFailureResponseDto
                 {
                     Success = false,
                     Message = "File size is more than 10MB"
@@ -88,14 +110,14 @@ namespace ZNWalks.Application.Services
             }
 
 
-            return new ImageUploadFailureResponseDto
+            return new UploadImageFailureResponseDto
             {
                 Success = true,
                 Message = "File Validated Successfully"
             };
         }
 
-        private async Task<string> GenerateUrlPath(Image imageDomain)
+        private async Task<Image> AddFilePathesToImageAsync(Image imageDomain)
         {
 
             var localFilePath = Path.Combine(hostEnvironment.ContentRootPath, "Images",
@@ -107,7 +129,12 @@ namespace ZNWalks.Application.Services
             var urlFilePath =
                 $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/Images/{imageDomain.StoredFileName}{imageDomain.FileExtension}";
 
-            return urlFilePath;
+            imageDomain.FilePath = urlFilePath;
+            imageDomain.LocalFilePath = localFilePath;
+
+            return imageDomain;
         }
+
+
     }
 }

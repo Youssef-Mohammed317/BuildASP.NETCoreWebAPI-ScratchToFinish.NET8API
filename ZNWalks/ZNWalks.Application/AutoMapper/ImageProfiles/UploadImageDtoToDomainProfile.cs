@@ -15,7 +15,7 @@ namespace ZNWalks.Application.AutoMapper.ImageProfiles
     {
         public UploadImageDtoToDomainProfile()
         {
-            CreateMap<ImageUploadRequestDto, Image>()
+            CreateMap<UploadImageRequestDto, Image>()
                 .ForMember(dest => dest.File, opt => opt.MapFrom(src => src.File))
                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.FileName))
                 .ForMember(dest => dest.FileExtension, opt => opt.MapFrom(src => Path.GetExtension(src.File.FileName)))

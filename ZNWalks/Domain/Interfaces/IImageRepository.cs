@@ -10,5 +10,7 @@ namespace ZNWalks.Domain.Interfaces
     public interface IImageRepository
     {
         Task CreateAsync(Image image);
+        Task<Image?> GetByIdAsync(Guid id);
+        void Delete(Image image);
     }
 }
