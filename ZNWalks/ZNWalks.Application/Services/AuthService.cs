@@ -97,7 +97,7 @@ namespace ZNWalks.Application.Services
             {
                 if (!roles.Contains(role.ToUpper()))
                 {
-                    new RegisterResponseDto
+                    return new RegisterResponseDto
                     {
                         Success = false,
                         Message = "There is invaild roles sent!, Please check your data"
