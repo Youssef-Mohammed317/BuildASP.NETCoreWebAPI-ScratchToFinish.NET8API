@@ -28,7 +28,6 @@ namespace ZNWalks.Api.Controllers.V2
         [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll()
         {
-            throw new Exception("My Exception");
             var difficulties = await difficultyService.GetAllAsync();
             return Ok(difficulties);
         }

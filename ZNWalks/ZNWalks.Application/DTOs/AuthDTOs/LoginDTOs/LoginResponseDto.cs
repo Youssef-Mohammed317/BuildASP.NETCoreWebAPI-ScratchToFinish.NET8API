@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZNWalks.Application.DTOs.AuthDTOs
+namespace ZNWalks.Application.DTOs.AuthDTOs.LoginDTOs
 {
-    public class RegisterResponseDto
+    public abstract class LoginResponseDto
     {
         public bool Success { get; set; }
         public string? Message { get; set; }
-        public string? UserId { get; set; }
     }
 }

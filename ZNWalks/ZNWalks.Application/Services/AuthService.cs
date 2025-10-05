@@ -10,6 +10,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using ZNWalks.Application.DTOs.AuthDTOs;
+using ZNWalks.Application.DTOs.AuthDTOs.LoginDTOs;
+using ZNWalks.Application.DTOs.AuthDTOs.RegisterDTOs;
 using ZNWalks.Application.Interfaces;
 using ZNWalks.Domain.Interfaces;
 using ZNWalks.Infra.Identity.Domian.Interfaces;
@@ -34,7 +36,7 @@ namespace ZNWalks.Application.Services
 
             if (user == null)
             {
-                return new LoginResponseDto
+                return new LoginFailureResponseDto
                 {
                     Success = false,
                     Message = "User Not Found"
@@ -45,7 +47,7 @@ namespace ZNWalks.Application.Services
 
             if (result == false)
             {
-                return new LoginResponseDto
+                return new LoginFailureResponseDto
                 {
                     Success = false,
                     Message = "Username or password inccorect!"
@@ -67,7 +69,7 @@ namespace ZNWalks.Application.Services
                 IsRevoked = false
             });
 
-            return new LoginResponseDto
+            return new LoginSuccessResponseDto
             {
                 Success = true,
                 Message = "Login successfully!",
@@ -85,7 +87,7 @@ namespace ZNWalks.Application.Services
         {
             if (registerRequestDto.Roles == null || !registerRequestDto.Roles.Any())
             {
-                return new RegisterResponseDto
+                return new RegisterFailureResponseDto
                 {
                     Success = false,
                     Message = "There is no Roles!, Please check your data"
@@ -98,7 +100,7 @@ namespace ZNWalks.Application.Services
             {
                 if (!roles.Contains(role.ToUpper()))
                 {
-                    return new RegisterResponseDto
+                    return new RegisterFailureResponseDto
                     {
                         Success = false,
                         Message = "There is invaild roles sent!, Please check your data"
@@ -116,7 +118,7 @@ namespace ZNWalks.Application.Services
 
             if (!result.Succeeded)
             {
-                return new RegisterResponseDto
+                return new RegisterFailureResponseDto
                 {
                     Success = false,
                     Message = string.Join(", ", result.Errors.Select(e => e.Description))
@@ -128,14 +130,14 @@ namespace ZNWalks.Application.Services
             if (!result.Succeeded)
             {
 
-                return new RegisterResponseDto
+                return new RegisterFailureResponseDto
                 {
                     Success = false,
                     Message = string.Join(", ", result.Errors.Select(e => e.Description))
                 };
             }
 
-            return new RegisterResponseDto
+            return new RegisterSuccessResponseDto
             {
                 Success = true,
                 Message = "User created successfully",

@@ -6,7 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ZNWalks.Api.CustomActionFilters;
-using ZNWalks.Application.DTOs.AuthDTOs;
+using ZNWalks.Application.DTOs.AuthDTOs.LoginDTOs;
+using ZNWalks.Application.DTOs.AuthDTOs.RegisterDTOs;
 using ZNWalks.Application.Interfaces;
 
 namespace ZNWalks.Api.Controllers.V1
