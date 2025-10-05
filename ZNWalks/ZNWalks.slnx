@@ -17,7 +17,4 @@
   <Folder Name="/Infra.IoC/">
     <Project Path="ZNWalks.Infra.IoC/ZNWalks.Infra.IoC.csproj" />
   </Folder>
-  <Folder Name="/UI/">
-    <Project Path="ZNWalks.UI.MVC/ZNWalks.UI.MVC.csproj" Id="c892433d-0eff-48f2-8b37-7670de33271d" />
-  </Folder>
 </Solution>
