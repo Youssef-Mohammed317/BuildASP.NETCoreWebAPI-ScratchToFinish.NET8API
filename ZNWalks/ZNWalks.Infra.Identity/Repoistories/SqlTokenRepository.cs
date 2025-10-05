@@ -10,11 +10,11 @@ using ZNWalks.Infra.Identity.Domian.Models;
 
 namespace ZNWalks.Infra.Identity.Repoistories
 {
-    public class TokenRepository : ITokenRepository
+    public class SqlTokenRepository : ITokenRepository
     {
         private readonly ZNWalksAuthDbContext _context;
 
-        public TokenRepository(ZNWalksAuthDbContext context)
+        public SqlTokenRepository(ZNWalksAuthDbContext context)
         {
             _context = context;
         }

@@ -10,11 +10,11 @@ using ZNWalks.Domain.Models;
 
 namespace ZNWalk.Infa.Data.Repositories
 {
-    public class WalkRepository : IWalkRepository
+    public class SqlWalkRepository : IWalkRepository
     {
         private readonly ZNWalksDbContext dbContext;
 
-        public WalkRepository(ZNWalksDbContext _dbContext)
+        public SqlWalkRepository(ZNWalksDbContext _dbContext)
         {
             dbContext = _dbContext;
         }

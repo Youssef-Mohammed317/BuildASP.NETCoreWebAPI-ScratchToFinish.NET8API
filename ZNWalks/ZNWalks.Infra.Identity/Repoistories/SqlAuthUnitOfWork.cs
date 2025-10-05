@@ -10,7 +10,7 @@ using ZNWalks.Infra.Identity.Domian.Models;
 
 namespace ZNWalks.Infra.Identity.Repoistories
 {
-    public class AuthUnitOfWork : IAuthUnitOfWork
+    public class SqlAuthUnitOfWork : IAuthUnitOfWork
     {
 
         private readonly ZNWalksAuthDbContext _dbContext;
@@ -19,7 +19,7 @@ namespace ZNWalks.Infra.Identity.Repoistories
         private IAuthRepository? _authRepository;
         private ITokenRepository? _tokenRepository;
 
-        public AuthUnitOfWork(ZNWalksAuthDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        public SqlAuthUnitOfWork(ZNWalksAuthDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
@@ -31,7 +31,7 @@ namespace ZNWalks.Infra.Identity.Repoistories
             {
                 if (_authRepository is null)
                 {
-                    _authRepository = new AuthRepository(_dbContext, _userManager, _roleManager);
+                    _authRepository = new SqlAuthRepository(_dbContext, _userManager, _roleManager);
                 }
                 return _authRepository;
             }
@@ -42,7 +42,7 @@ namespace ZNWalks.Infra.Identity.Repoistories
             {
                 if (_tokenRepository is null)
                 {
-                    _tokenRepository = new TokenRepository(_dbContext);
+                    _tokenRepository = new SqlTokenRepository(_dbContext);
                 }
                 return _tokenRepository;
             }

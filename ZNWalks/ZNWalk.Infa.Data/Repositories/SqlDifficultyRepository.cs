@@ -10,11 +10,11 @@ using ZNWalks.Domain.Models;
 
 namespace ZNWalk.Infa.Data.Repositories
 {
-    public class DifficultyRepository : IDifficultyRepository
+    public class SqlDifficultyRepository : IDifficultyRepository
     {
         private readonly ZNWalksDbContext dbContext;
 
-        public DifficultyRepository(ZNWalksDbContext _dbContext)
+        public SqlDifficultyRepository(ZNWalksDbContext _dbContext)
         {
             dbContext = _dbContext;
         }

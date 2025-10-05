@@ -13,13 +13,13 @@ using ZNWalks.Infra.Identity.Domian.Models;
 
 namespace ZNWalks.Infra.Identity.Repoistories
 {
-    public class AuthRepository : IAuthRepository
+    public class SqlAuthRepository : IAuthRepository
     {
         private readonly ZNWalksAuthDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
 
-        public AuthRepository(ZNWalksAuthDbContext _context,
+        public SqlAuthRepository(ZNWalksAuthDbContext _context,
             UserManager<ApplicationUser> _userManager,
             RoleManager<ApplicationRole> _roleManager)
         {
@@ -30,7 +30,7 @@ namespace ZNWalks.Infra.Identity.Repoistories
         public async Task<List<string?>> GetRolesAsync()
         {
             var roles = await context.Roles.Select(r => r.NormalizedName).ToListAsync();
-           
+
             return roles;
         }
 

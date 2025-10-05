@@ -10,11 +10,11 @@ using ZNWalks.Domain.Models;
 
 namespace ZNWalk.Infa.Data.Repositories
 {
-    public class RegionRepository : IRegionRepository
+    public class SqlRegionRepository : IRegionRepository
     {
         private readonly ZNWalksDbContext dbContext;
 
-        public RegionRepository(ZNWalksDbContext _dbContext)
+        public SqlRegionRepository(ZNWalksDbContext _dbContext)
         {
             dbContext = _dbContext;
         }

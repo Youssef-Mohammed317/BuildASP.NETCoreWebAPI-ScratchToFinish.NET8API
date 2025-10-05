@@ -74,10 +74,9 @@ namespace ZNWalks.Infra.IoC
            });
             #endregion
 
-
             #region UnitOfWork
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAuthUnitOfWork, AuthUnitOfWork>();
+            services.AddScoped<IUnitOfWork, SqlUnitOfWork>();
+            services.AddScoped<IAuthUnitOfWork, SqlAuthUnitOfWork>();
             #endregion
 
             #region AutoMapper
@@ -94,9 +93,8 @@ namespace ZNWalks.Infra.IoC
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddHttpContextAccessor(); // for get the http request in service layer
             #endregion
-
-            services.AddHttpContextAccessor(); 
         }
     }
 }

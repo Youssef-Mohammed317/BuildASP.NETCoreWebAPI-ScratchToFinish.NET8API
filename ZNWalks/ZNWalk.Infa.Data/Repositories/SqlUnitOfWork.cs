@@ -8,7 +8,7 @@ using ZNWalks.Domain.Interfaces;
 
 namespace ZNWalk.Infa.Data.Repositories
 {
-    public class UnitOfWork : IUnitOfWork
+    public class SqlUnitOfWork : IUnitOfWork
     {
         private readonly ZNWalksDbContext dbContext;
         private IRegionRepository? regionRepository;
@@ -16,7 +16,7 @@ namespace ZNWalk.Infa.Data.Repositories
         private IWalkRepository? walkRepository;
         private IImageRepository? imageRepository;
 
-        public UnitOfWork(ZNWalksDbContext _dbContext)
+        public SqlUnitOfWork(ZNWalksDbContext _dbContext)
         {
             dbContext = _dbContext;
         }
@@ -26,7 +26,7 @@ namespace ZNWalk.Infa.Data.Repositories
             {
                 if (regionRepository is null)
                 {
-                    regionRepository = new RegionRepository(dbContext);
+                    regionRepository = new SqlRegionRepository(dbContext);
                 }
                 return regionRepository;
             }
@@ -37,7 +37,7 @@ namespace ZNWalk.Infa.Data.Repositories
             {
                 if (walkRepository is null)
                 {
-                    walkRepository = new WalkRepository(dbContext);
+                    walkRepository = new SqlWalkRepository(dbContext);
                 }
                 return walkRepository;
             }
@@ -48,7 +48,7 @@ namespace ZNWalk.Infa.Data.Repositories
             {
                 if (difficultyRepository is null)
                 {
-                    difficultyRepository = new DifficultyRepository(dbContext);
+                    difficultyRepository = new SqlDifficultyRepository(dbContext);
                 }
                 return difficultyRepository;
             }
@@ -59,7 +59,7 @@ namespace ZNWalk.Infa.Data.Repositories
             {
                 if (imageRepository is null)
                 {
-                    imageRepository = new ImageRepository(dbContext);
+                    imageRepository = new SqlImageRepository(dbContext);
                 }
                 return imageRepository;
             }
