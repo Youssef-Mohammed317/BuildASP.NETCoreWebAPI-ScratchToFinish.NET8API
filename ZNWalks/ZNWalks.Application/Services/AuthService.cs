@@ -83,7 +83,6 @@ namespace ZNWalks.Application.Services
 
         public async Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto registerRequestDto)
         {
-            var roles = await unitOfWork.AuthRepository.GetRolesAsync();
             if (registerRequestDto.Roles == null || !registerRequestDto.Roles.Any())
             {
                 return new RegisterResponseDto
@@ -92,6 +91,8 @@ namespace ZNWalks.Application.Services
                     Message = "There is no Roles!, Please check your data"
                 };
             }
+
+            var roles = await unitOfWork.AuthRepository.GetRolesAsync();
 
             foreach (var role in registerRequestDto.Roles)
             {
