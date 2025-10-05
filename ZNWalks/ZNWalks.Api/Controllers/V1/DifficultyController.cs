@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -9,10 +10,11 @@ using ZNWalks.Application.Interfaces;
 using ZNWalks.Application.Services;
 using ZNWalks.Domain.Models;
 
-namespace ZNWalks.Api.Controllers
+namespace ZNWalks.Api.Controllers.V1
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class DifficultyController : ControllerBase
     {
         private readonly IDifficultyService difficultyService;

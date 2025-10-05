@@ -1,12 +1,13 @@
 ﻿
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using ZNWalk.Infa.Data.Contexts;
 using ZNWalks.Api.CustomMiddlewares;
 using ZNWalks.Infra.IoC;
-using Serilog;
 
 namespace ZNWalks.Api
 {
@@ -27,23 +28,41 @@ namespace ZNWalks.Api
 
             // Add services to the container.
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ZNWalks API", Version = "v1" });
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+
+            builder.Services
+            .AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ReportApiVersions = true;
+                options.ApiVersionReader = ApiVersionReader.Combine(
+                    new UrlSegmentApiVersionReader(),
+                    new HeaderApiVersionReader("x-api-version"),
+                    new MediaTypeApiVersionReader("x-api-version"));
+            })
+            .AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV"; // Example: v1, v2, etc.
+                options.SubstituteApiVersionInUrl = true;
+            });
+
+            // 🔹 Swagger
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                // نضيف سكيم JWT
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and then your valid JWT token.\r\nExample: \"Bearer abc123xyz\""
+                    Description = "Enter 'Bearer' [space] + your token"
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -59,14 +78,27 @@ namespace ZNWalks.Api
                 });
             });
 
+            // Configure Swagger for versioning
+            builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+
+
             RegisterServices(builder.Services, builder.Configuration);
 
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
+                var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(options =>
+                {
+                    foreach (var description in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant());
+                    }
+                });
             }
 
 

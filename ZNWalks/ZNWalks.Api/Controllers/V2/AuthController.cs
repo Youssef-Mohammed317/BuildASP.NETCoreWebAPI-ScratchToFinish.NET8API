@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,10 +9,11 @@ using ZNWalks.Api.CustomActionFilters;
 using ZNWalks.Application.DTOs.AuthDTOs;
 using ZNWalks.Application.Interfaces;
 
-namespace ZNWalks.Api.Controllers
+namespace ZNWalks.Api.Controllers.V2
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService authService;

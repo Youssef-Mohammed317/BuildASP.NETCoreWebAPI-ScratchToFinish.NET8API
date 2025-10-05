@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using Asp.Versioning;
+using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,11 @@ using ZNWalks.Api.CustomActionFilters;
 using ZNWalks.Application.DTOs.ImageDTOs;
 using ZNWalks.Application.Interfaces;
 
-namespace ZNWalks.Api.Controllers
+namespace ZNWalks.Api.Controllers.V1
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class ImageController : ControllerBase
     {
         private readonly IImageService imageService;

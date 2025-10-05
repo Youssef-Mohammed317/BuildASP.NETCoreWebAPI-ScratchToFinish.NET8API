@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
@@ -10,10 +11,11 @@ using ZNWalks.Application.DTOs.Common.Sorting;
 using ZNWalks.Application.DTOs.WalkDTOs;
 using ZNWalks.Application.Interfaces;
 
-namespace ZNWalks.Api.Controllers
+namespace ZNWalks.Api.Controllers.V1
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class WalkController : ControllerBase
     {
         private readonly IWalkService walkService;
