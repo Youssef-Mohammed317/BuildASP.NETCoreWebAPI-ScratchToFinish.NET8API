@@ -40,24 +40,6 @@ namespace ZNWalks.Api.Controllers.V1
             return Ok(walks);
         }
 
-        [HttpPost("search")]
-        [Authorize(Roles = "Reader")]
-        public async Task<IActionResult> Search([FromBody] GetAllRequestDto requestDto)
-        {
-            var walks = await walkService.SearchWalkAsync(requestDto);
-
-            return Ok(walks);
-        }
-        [HttpPost("search/details")]
-        [Authorize(Roles = "Reader")]
-        public async Task<IActionResult> SearchWithDetails([FromBody] GetAllRequestDto requestDto)
-        {
-            var walks = await walkService.SearchWalkWithDetailsAsync(requestDto);
-
-            return Ok(walks);
-        }
-
-
         [HttpGet]
         [Route("details")]
         [Authorize(Roles = "Reader")]
