@@ -8,21 +8,24 @@ namespace ZNWalks.Api.CustomActionFilters
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var errors = context.ModelState
-                .Where(ms => ms.Value.Errors.Count > 0)
+                .Where(ms => ms.Value?.Errors?.Count > 0)
                 .Select(ms => new
                 {
                     Field = ms.Key,
-                    Errors = ms.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    Errors = ms.Value?.Errors?.Select(e => e.ErrorMessage).ToArray()
                 });
-
-            var response = new
+            if (errors.Any())
             {
-                Success = false,
-                Message = "Validation failed.",
-                Errors = errors
-            };
 
-            context.Result = new BadRequestObjectResult(response);
+                var response = new
+                {
+                    Success = false,
+                    Message = "Validation failed.",
+                    Errors = errors
+                };
+
+                context.Result = new BadRequestObjectResult(response);
+            }
         }
     }
 }
