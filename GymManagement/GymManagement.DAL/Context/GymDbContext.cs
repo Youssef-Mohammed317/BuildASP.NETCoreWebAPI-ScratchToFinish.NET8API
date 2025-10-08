@@ -14,12 +14,8 @@ namespace GymManagement.DAL.Context
     {
         public GymDbContext() { }
 
-        //public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
-        //{ }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=.;Database=GymManagmentDb;Trusted_Connection=True;TrustServerCertificate=True;");
-        }
+        public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
+        { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
