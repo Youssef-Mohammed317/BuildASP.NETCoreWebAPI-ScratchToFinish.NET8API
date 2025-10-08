@@ -12,7 +12,7 @@ namespace ZNWalks.Application.DTOs.Common.Filtering
     public static class FilterHelper
     {
 
-        public static IQueryable<T> Filter<T>(IQueryable<T> source, List<FilterParam?>? filtersParam) where T : class 
+        public static IQueryable<T> Filter<T>(IQueryable<T> source, List<FilterParam?>? filtersParam) where T : class
         {
             if (filtersParam == null) return source;
 
